@@ -1,0 +1,9 @@
+{
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/include"
+    ],
+    "files.associations": {
+        "cmath": "cpp"
+    },
+    "cmake.sourceDirectory": "C:/Users/tpthu/OneDrive/Documents/Kuliah Semester 5/Tugas-Besar1-DAI/include/glm"
+}
