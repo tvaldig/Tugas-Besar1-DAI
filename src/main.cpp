@@ -1,9 +1,14 @@
 #include <iostream>
+#include <vector>
+#include <random>
+#include <algorithm>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#define GLT_IMPLEMENTATION
+#include "gltext.h" /* https://github.com/vallentin/glText */
 
 const int SCR_WIDTH = 1200;
 const int SCR_HEIGHT = 800;
@@ -13,13 +18,14 @@ void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
 
-// Global variables to track mouse input
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 float pitch = 0.0f, yaw = -90.0f;
 float sensitivity = 0.2f;
 bool firstMouse = true;
 bool isMouseButtonPressed = false;
+std::vector<GLTtext*> texts(125);
+
 
 const char *vertexShaderSource = R"(
 #version 330 core
@@ -36,11 +42,10 @@ const char *fragmentShaderSource = R"(
 out vec4 FragColor;
 void main()
 {
-    FragColor = vec4(0.3, 0.6, 1.0, 0.2); // Adjust alpha for transparency
+    FragColor = vec4(0.3, 0.6, 1.0, 0.2);
 }
 )";
 
-// Cube vertices for a wireframe-like grid
 float vertices[] = {
     -0.4f, -0.4f, -0.4f,
     0.4f, -0.4f, -0.4f,
@@ -49,21 +54,35 @@ float vertices[] = {
     -0.4f, -0.4f, 0.4f,
     0.4f, -0.4f, 0.4f,
     0.4f, 0.4f, 0.4f,
-    -0.4f, 0.4f, 0.4f};
-
-unsigned int indices[] = {
-    0, 1, 1, 2, 2, 3, 3, 0, // Back face
-    4, 5, 5, 6, 6, 7, 7, 4, // Front face
-    0, 4, 1, 5, 2, 6, 3, 7  // Connecting edges
+    -0.4f, 0.4f, 0.4f
 };
 
-int main()
+unsigned int indices[] = {
+    0, 1, 1, 2, 2, 3, 3, 0,
+    4, 5, 5, 6, 6, 7, 7, 4,
+    0, 4, 1, 5, 2, 6, 3, 7
+};
+
+std::vector<int> generateRandomNumbers(int n, int min, int max) {
+    std::vector<int> numbers(max - min + 1);
+    for (int i = 0; i < numbers.size(); ++i)
+        numbers[i] = i + min;
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(numbers.begin(), numbers.end(), g);
+    
+    numbers.resize(n);
+    return numbers;
+}
+
+int main(int argc, char *argv[])
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "3D Cube Grid", NULL, NULL);
     if (window == NULL)
     {
@@ -76,7 +95,8 @@ int main()
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
+    
+    
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -117,48 +137,100 @@ int main()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    if (!gltInit())
+    {
+        std::cout << "Failed to initialize glText" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+
+    for (int i = 0; i < 125; ++i)
+        texts[i] = gltCreateText();
+
+    auto numbers = generateRandomNumbers(125, 1, 125);
+    for (int i = 0; i < 125; ++i)
+        gltSetText(texts[i], std::to_string(numbers[i]).c_str());
+
     while (!glfwWindowShouldClose(window))
     {
-        processInput(window);
+    processInput(window);
+    // Clear screen
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // PRojection matrix
+    glUseProgram(shaderProgram);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+    view = glm::rotate(view, glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+    view = glm::rotate(view, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
 
-        glUseProgram(shaderProgram);
-
-        // Apply the rotation to the entire grid
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
-        view = glm::rotate(view, glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
-        view = glm::rotate(view, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
-
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-
-        for (int x = -2; x <= 2; ++x)
+    // Draw each cube with grid lines
+    for (int x = -2; x <= 2; ++x)
+    {
+        for (int y = -2; y <= 2; ++y)
         {
-            for (int y = -2; y <= 2; ++y)
+            for (int z = -2; z <= 2; ++z)
             {
-                for (int z = -2; z <= 2; ++z)
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+                glm::mat4 transform = projection * view * model;
+                unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+                glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+                glBindVertexArray(VAO);
+                glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
+            }
+        }
+    }
+    glDisable(GL_DEPTH_TEST);
+
+    int textIndex = 0;
+    for (int x = -2; x <= 2; ++x)
+    {
+        for (int y = -2; y <= 2; ++y)
+        {
+            for (int z = -2; z <= 2; ++z)
+            {
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+                glm::mat4 transform = projection * view * model;
+                unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+                glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+                glBindVertexArray(VAO);
+                glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
+
+                glm::vec4 textPosition = transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); // Disetiap tengah kubus
+                
+                if (textPosition.w > 0.0f) 
                 {
-                    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
-                    glm::mat4 transform = projection * view * model;
+                    // 3D NormaliZation
+                    textPosition /= textPosition.w;
 
-                    unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-                    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+                    int xpos = (int)((textPosition.x * 0.5f + 0.5f) * SCR_WIDTH);
+                    int ypos = (int)((-textPosition.y * 0.5f + 0.5f) * SCR_HEIGHT);
 
-                    glBindVertexArray(VAO);
-                    glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
+                    gltBeginDraw();
+                    gltColor(1.0f, 0.0f, 0.0f, 1.0f);
+                    gltDrawText2D(texts[textIndex++], xpos, ypos, 1.0f);
+                    gltEndDraw();
                 }
             }
         }
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
     }
+    
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
 
+    for (auto text : texts)
+        gltDeleteText(text);
+    
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 
+    gltTerminate();
     glfwTerminate();
     return 0;
 }
@@ -190,7 +262,7 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     }
 
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+    float yoffset = lastY - ypos;
     lastX = xpos;
     lastY = ypos;
 
