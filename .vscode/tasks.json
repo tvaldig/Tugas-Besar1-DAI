@@ -12,6 +12,9 @@
                 "-L${workspaceFolder}/lib",
                 "${workspaceFolder}/src/main.cpp",
                 "${workspaceFolder}/src/glad.c",
+                "${workspaceFolder}/src/objfunc/obj.cpp",
+                "${workspaceFolder}/src/simulated_annealing/sa.cpp",
+                "${workspaceFolder}/src/steepest_ascent_hl/sahl.cpp",
                 "-lglfw3dll",
                 "-o",
                 "${workspaceFolder}/cube.exe"

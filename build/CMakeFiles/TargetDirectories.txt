@@ -1,2 +1,2 @@
-C:/Users/tpthu/OneDrive/Documents/Kuliah Semester 5/Tugas-Besar1-DAI/build/CMakeFiles/edit_cache.dir
-C:/Users/tpthu/OneDrive/Documents/Kuliah Semester 5/Tugas-Besar1-DAI/build/CMakeFiles/rebuild_cache.dir
+C:/Users/LENOVO/Documents/OneDrive/Documents/Kuliah Semester 5/Tugas-Besar1-DAI/build/CMakeFiles/edit_cache.dir
+C:/Users/LENOVO/Documents/OneDrive/Documents/Kuliah Semester 5/Tugas-Besar1-DAI/build/CMakeFiles/rebuild_cache.dir
