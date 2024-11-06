@@ -52,7 +52,6 @@ Result simulated_annealing() {
             }
         }
 
-
         std::cout << "Jumlah h: " << jumlahSkor(result.cube) << std::endl;
         std::cout << "Jumlah Error: " << calculate_error(result.cube) << std::endl;
 
