@@ -15,6 +15,8 @@ struct Result {
     int steps;
     double time_taken;
     std::vector<std::vector<std::vector<int>>> cube;
+    std::vector<std::vector<std::vector<int>>> initial_cube;
+    std::vector<double> error_history;
 };
 
 std::vector<std::vector<std::vector<std::vector<int>>>> generate_neighbors(const std::vector<std::vector<std::vector<int>>>& cube);
