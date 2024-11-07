@@ -1,8 +1,8 @@
 #include "sahl.hpp"
 
-Result steepest_ascent_hill_climbing() {
+Result steepest_ascent_hill_climbing(std::vector<std::vector<std::vector<int>>> cube) {
     Result result;
-    result.cube = initialize_random_cube();
+    result.cube = cube;
     result.error = calculate_error(result.cube);
     result.steps = 0;
 

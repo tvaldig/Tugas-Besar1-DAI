@@ -29,6 +29,8 @@ float sensitivity = 0.2f;
 bool firstMouse = true;
 bool isMouseButtonPressed = false;
 std::vector<std::vector<std::vector<GLTtext*>>> texts(5, std::vector<std::vector<GLTtext*>>(5, std::vector<GLTtext*>(5, nullptr)));
+GLTtext* text_continue;
+GLTtext* title;
 
 const char *vertexShaderSource = R"(
 #version 330 core
@@ -66,21 +68,9 @@ unsigned int indices[] = {
     0, 4, 1, 5, 2, 6, 3, 7
 };
 
-std::vector<int> generateRandomNumbers(int n, int min, int max) {
-    std::vector<int> numbers(max - min + 1);
-    for (int i = 0; i < numbers.size(); ++i)
-        numbers[i] = i + min;
-
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(numbers.begin(), numbers.end(), g);
-    
-    numbers.resize(n);
-    return numbers;
-}
 void processInput(GLFWwindow *window)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
@@ -132,8 +122,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
     }
 }
 
-int main(int argc, char *argv[])
-{
+int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial){
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -199,24 +188,19 @@ int main(int argc, char *argv[])
         glfwTerminate();
         return -1;
     }
-
+    gltBeginDraw();
      for (int i = 0; i < 5; ++i)
         for(int j = 0; j < 5; j++)
             for(int k = 0; k < 5; k++)
                 texts[i][j][k] = gltCreateText();
 
-    auto cube = initialize_random_cube();
     for (int i = 0; i < 5; ++i)
         for(int j = 0; j < 5; j++)
             for(int k = 0; k < 5; k++)
                 gltSetText(texts[i][j][k], std::to_string(cube[i][j][k]).c_str());
-
-    while (!glfwWindowShouldClose(window))
-    {
-    // std::cout << "Algoritma apa yang diinginkan?" << std::endl;
-    // std::cout << " (1) Steepest Ascent Hill Climbing" << std::endl;
-    // std::cout << " (2) Simulated Annealing" << std::endl;
-    // std::cout << " (3) Genetic Algorithm" << std::endl;
+    
+    while (!glfwWindowShouldClose(window)){
+   
     processInput(window);
 
     // Clear screen
@@ -232,59 +216,82 @@ int main(int argc, char *argv[])
     view = glm::rotate(view, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
 
-    // Gambar Kubus
-    for (int x = -2; x <= 2; ++x)
-    {
-        for (int y = -2; y <= 2; ++y)
-        {
-            for (int z = -2; z <= 2; ++z)
-            {
-                glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
-                glm::mat4 transform = projection * view * model;
-                unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-                glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-                glBindVertexArray(VAO);
-                glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
-            }
-        }
-    }
-    glDisable(GL_DEPTH_TEST);
-
-    int textIndex = 0;
-    for (int i = 0; i < 5; ++i) {
-    for (int j = 0; j < 5; ++j) {
-        for (int k = 0; k < 5; ++k) {
-            if (texts[i][j][k]) {
-                glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(i - 2, j - 2, k - 2));
-                glm::mat4 transform = projection * view * model;
-                unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-                glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-                glBindVertexArray(VAO);
-                glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
-
-                glm::vec4 textPosition = transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-
-                if (textPosition.w > 0.0f) {
-                    textPosition /= textPosition.w;
-
-                    int xpos = (int)((textPosition.x * 0.5f + 0.5f) * SCR_WIDTH);
-                    int ypos = (int)((-textPosition.y * 0.5f + 0.5f) * SCR_HEIGHT);
-
-                    gltBeginDraw();
-                    gltColor(1.0f, 0.0f, 0.0f, 1.0f);
-                    gltDrawText2D(texts[i][j][k], xpos, ypos, 1.0f);
-                    gltEndDraw();
+    for (int x = -2; x <= 2; ++x) {
+            for (int y = -2; y <= 2; ++y) {
+                for (int z = -2; z <= 2; ++z) {
+                    //int i = x + 2, j = y + 2, k = z + 2;
+                    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
+                    glm::mat4 transform = projection * view * model;
+                    unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+                    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+                    glBindVertexArray(VAO);
+                    glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
                 }
             }
         }
+
+        // Text rendering for cube values
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                for (int k = 0; k < 5; ++k) {
+                    if (texts[i][j][k]) {
+                        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(i - 2, j - 2, k - 2));
+                        glm::mat4 transform = projection * view * model;
+                        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+                        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+                        glBindVertexArray(VAO);
+                        glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
+
+                        glm::vec4 textPosition = transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+                        if (textPosition.w > 0.0f) {
+                            textPosition /= textPosition.w;
+                            int xpos = (int)((textPosition.x * 0.5f + 0.5f) * SCR_WIDTH);
+                            int ypos = (int)((-textPosition.y * 0.5f + 0.5f) * SCR_HEIGHT);
+
+                            gltBeginDraw();
+                                    bool isPartOfMagicSum = (
+                                isMagicRow(cube, i, j) || 
+                                isMagicColumn(cube, i, k) || 
+                                isMagicDiagonal(cube, i) || 
+                                isMagicPillar(cube, j, k) || 
+                                isMagic3DDiagonal(cube)
+                            );
+
+
+                            if (isPartOfMagicSum) {
+                                gltColor(0.0f, 1.0f, 0.0f, 1.0f);  // Ijo
+                            } else {
+                                gltColor(1.0f, 0.0f, 0.0f, 1.0f);  // Merah
+                            }
+                            gltDrawText2D(texts[i][j][k], xpos, ypos, 1.0f);
+                            gltEndDraw();
+                        }
+                    }
+                }
+            }
+        }
+
+        gltBeginDraw();
+        text_continue = gltCreateText();
+        title = gltCreateText();
+        if(isInitial){
+            gltSetText(title, "INITIAL STATE");
+        } else {
+            gltSetText(title, "FINAL STATE");
+        }
+        gltColor(1.0f, 1.0f, 1.0f, 1.0f);
+        gltDrawText2D(title, (SCR_WIDTH / 2) - 100, 20, 2.0f);
+        gltEndDraw();
+        gltBeginDraw();
+        text_continue = gltCreateText();
+        gltSetText(text_continue, "PRESS SPACEBAR TO CONTINUE");
+        gltColor(1.0f, 1.0f, 1.0f, 1.0f);
+        gltDrawText2D(text_continue, (SCR_WIDTH / 2) - 200, 750, 2.0f);
+        gltEndDraw();
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
-}
-
-    
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-}
-
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
             for (int k = 0; k < 5; ++k) {
@@ -301,7 +308,37 @@ int main(int argc, char *argv[])
 
     gltTerminate();
     glfwTerminate();
+    return 0;
+}
+
 
     
+
+int main(int argc, char *argv[])
+{
+    int algoritma = -1;
+    do {
+        std::cout << "Algoritma apa yang diinginkan?" << std::endl;
+        std::cout << "(1) Steepest Ascent Hill Climbing" << std::endl;
+        std::cout << "(2) Simulated Annealing" << std::endl;
+        std::cout << "(3) Genetic Algorithm" << std::endl;
+        std::cout << "(4) EXIT" << std::endl;
+        std::cin >> algoritma;
+        if(algoritma == 4){
+            exit(0);
+        }
+        std::cout << "Loading Initial State..." << std::endl;
+        std::vector<std::vector<std::vector<int>>> initial_cube = initialize_random_cube();
+        displayState(initial_cube, true);
+        Result result;
+        switch(algoritma){
+            case 1:
+                result = steepest_ascent_hill_climbing(initial_cube);
+            //tambahin case masing masing lagi
+        }
+        displayState(result.cube, false);
+        
+    }
+    while(true);
     return 0;
 }

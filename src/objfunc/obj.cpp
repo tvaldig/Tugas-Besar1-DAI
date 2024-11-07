@@ -50,7 +50,6 @@ std::vector<std::vector<std::vector<int>>> initialize_random_cube() {
 
 int jumlahSkor(const std::vector<std::vector<std::vector<int>>>& cube) {
     int sum = 0;
-
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
             int row_sum = 0, col_sum = 0, pillar_sum = 0;
@@ -173,4 +172,48 @@ std::vector<std::vector<std::vector<int>>> swap_elements(
         auto new_cube = cube;
         std::swap(new_cube[x1][y1][z1], new_cube[x2][y2][z2]);
         return new_cube;
+}
+
+bool isMagicRow(const std::vector<std::vector<std::vector<int>>> &cube, int level, int row) {
+    int sum = 0;
+    for (int i = 0; i < 5; i++) {
+        sum += cube[level][row][i];
+    }
+    return sum == target_sum;
+}
+
+bool isMagicColumn(const std::vector<std::vector<std::vector<int>>> &cube, int level, int column) {
+    int sum = 0;
+    for (int i = 0; i < 5; i++) {
+        sum += cube[level][column][i];
+    }
+    return sum == target_sum;
+}
+
+bool isMagicPillar(const std::vector<std::vector<std::vector<int>>> &cube, int row, int column) {
+    int sum = 0;
+    for (int i = 0; i < 5; i++) {
+        sum += cube[i][row][column];
+    }
+    return sum == target_sum;
+}
+
+bool isMagicDiagonal(const std::vector<std::vector<std::vector<int>>> &cube, int level) {
+    int sum1 = 0, sum2 = 0;
+    for (int i = 0; i < 5; ++i) {
+        sum1 += cube[level][i][i];  
+        sum2 += cube[level][i][4 - i];     
+    }
+    return (sum1 == target_sum) || (sum2 == target_sum);
+}
+
+bool isMagic3DDiagonal(const std::vector<std::vector<std::vector<int>>> &cube) {
+    int sum1 = 0, sum2 = 0, sum3 = 0, sum4= 0;
+    for (int i = 0; i < 5; ++i) {
+        sum1 += cube[i][i][i];  
+        sum2 += cube[i][i][4 - i]; 
+        sum1 += cube[i][4-i][i];  
+        sum2 += cube[i][4-i][4 - i];         
+    }
+    return (sum1 == target_sum) || (sum2 == target_sum);
 }
