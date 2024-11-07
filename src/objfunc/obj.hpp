@@ -28,6 +28,11 @@ double calculate_error(const std::vector<std::vector<std::vector<int>>>& cube);
 std::vector<std::vector<std::vector<int>>> swap_elements(
     const std::vector<std::vector<std::vector<int>>>& cube, int x1, int y1, int z1, int x2, int y2, int z2);
 
+bool isMagicRow(const std::vector<std::vector<std::vector<int>>> &cube, int level, int row);
+bool isMagicColumn(const std::vector<std::vector<std::vector<int>>> &cube, int level, int column);
+bool isMagicDiagonal(const std::vector<std::vector<std::vector<int>>> &cube, int level);
+bool isMagicPillar(const std::vector<std::vector<std::vector<int>>> &cube, int row, int column);
+bool isMagic3DDiagonal(const std::vector<std::vector<std::vector<int>>> &cube);
 
 
 #endif
