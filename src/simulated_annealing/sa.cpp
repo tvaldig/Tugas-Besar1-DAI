@@ -64,3 +64,11 @@ Result simulated_annealing() {
 
     return result;
 }
+
+int main() {
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    auto cube = initialize_random_cube();
+    Result rsult = simulated_annealing();
+    
+    return 0;
+}

@@ -23,6 +23,7 @@ Result steepest_ascent_hill_climbing(std::vector<std::vector<std::vector<int>>> 
                 double neighbor_error = calculate_error(neighbor);
 
                 if (neighbor_error < best_error) {
+                    std::cout<< "steepest ascent hill climbing" << std::endl;
                     std::cout << "Error: " << neighbor_error << std::endl;
                     std::cout << "Jumlah h: " << jumlahSkor(neighbor) << std::endl;
                     best_error = neighbor_error;
@@ -44,4 +45,12 @@ Result steepest_ascent_hill_climbing(std::vector<std::vector<std::vector<int>>> 
     auto end_time = std::chrono::high_resolution_clock::now();
     result.time_taken = std::chrono::duration<double>(end_time - start_time).count();
     return result;
+}
+
+int main() {
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    auto cube = initialize_random_cube();
+    Result rsult = steepest_ascent_hill_climbing(cube);
+    
+    return 0;
 }

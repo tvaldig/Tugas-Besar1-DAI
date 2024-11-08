@@ -1,9 +1,9 @@
 #include "sm.hpp"
 
-Result hill_climbing_with_sideway_moves(int max_sideways_moves) {
+Result hill_climbing_with_sideway_moves(std::vector<std::vector<std::vector<int>>> cube, int max_sideways_moves) {
     Result result;
     result.initial_cube = initialize_random_cube();
-    result.cube = result.initial_cube;
+    result.cube = cube;
     result.error = calculate_error(result.cube);
     result.steps = 0;
 
@@ -25,6 +25,9 @@ Result hill_climbing_with_sideway_moves(int max_sideways_moves) {
                 double neighbor_error = calculate_error(neighbor);
 
                 if (neighbor_error < best_error) {
+                    std::cout << "sideway move" << std::endl;
+                    std::cout << "Error: " << neighbor_error << std::endl;
+                    std::cout << "Jumlah h: " << jumlahSkor(neighbor) << std::endl;
                     best_error = neighbor_error;
                     best_cube = neighbor;
                     sideway_moves = 0;
@@ -58,4 +61,12 @@ Result hill_climbing_with_sideway_moves(int max_sideways_moves) {
     auto end_time = std::chrono::high_resolution_clock::now();
     result.time_taken = std::chrono::duration<double>(end_time - start_time).count();
     return result;
+}
+
+int main() {
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    auto cube = initialize_random_cube();
+    Result rsult = hill_climbing_with_sideway_moves(cube, 10000);
+    
+    return 0;
 }
