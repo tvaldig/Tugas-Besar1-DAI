@@ -13,6 +13,9 @@
 #include "objfunc/obj.hpp"
 #include "simulated_annealing/sa.hpp" /* Simulated Annealing */
 #include "steepest_ascent_hl/sahl.hpp" /* Steepest Ascent Hill Climbing*/
+#include "sideway_move/sm.hpp" /* Hill Climbing Sideway Move*/
+#include "stochastic_hc/shc.hpp" /* Stochastic Hill Climbing*/
+#include "genetic/ga.hpp" /* Genetic Algortihm */
 
 const int SCR_WIDTH = 1200;
 const int SCR_HEIGHT = 800;
@@ -31,6 +34,44 @@ bool isMouseButtonPressed = false;
 std::vector<std::vector<std::vector<GLTtext*>>> texts(5, std::vector<std::vector<GLTtext*>>(5, std::vector<GLTtext*>(5, nullptr)));
 GLTtext* text_continue;
 GLTtext* title;
+
+std::vector<std::vector<std::vector<int>>> perfectMagicCube = {
+    {
+        {25, 16, 80, 104, 90},
+        {115, 98, 4, 1, 97},
+        {42, 111, 85, 2, 75},
+        {66, 72, 27, 102, 48},
+        {67, 18, 119, 106, 5}
+    },
+    {
+        {91, 77, 71, 6, 70},
+        {52, 64, 117, 69, 13},
+        {30, 118, 21, 123, 23},
+        {26, 39, 92, 44, 114},
+        {116, 17, 14, 73, 95}
+    },
+    {
+        {47, 61, 45, 76, 86},
+        {107, 43, 38, 33, 94},
+        {89, 68, 63, 58, 37},
+        {32, 93, 88, 83, 19},
+        {40, 50, 81, 65, 79}
+    },
+    {
+        {31, 53, 112, 109, 10},
+        {12, 82, 34, 87, 100},
+        {103, 3, 105, 8, 96},
+        {113, 57, 9, 62, 74},
+        {56, 120, 55, 49, 35}
+    },
+    {
+        {121, 108, 7, 20, 59},
+        {29, 28, 122, 125, 11},
+        {51, 15, 41, 124, 84},
+        {78, 54, 99, 24, 60},
+        {36, 110, 46, 22, 101}
+    }
+};
 
 const char *vertexShaderSource = R"(
 #version 330 core
@@ -257,9 +298,20 @@ int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial
                                 isMagic3DDiagonal(cube)
                             );
 
-
                             if (isPartOfMagicSum) {
-                                gltColor(0.0f, 1.0f, 0.0f, 1.0f);  // Ijo
+                                int constraintCount = countConstraints(cube, i, j, k);
+                                if(constraintCount < 2){
+                                    gltColor(0.0f, 1.0f, 0.0f, 1.0f);  // Ijo
+                                } else if (constraintCount >= 2 && constraintCount < 5)
+                                {
+                                    gltColor(0.3f, 0.7f, 0.0f, 1.0f);  // Ijo
+                                } else if(constraintCount >= 5 && constraintCount < 8) {
+                                    gltColor(0.5f, 0.5f, 0.0f, 1.0f);  // Ijo
+                                } else if(constraintCount >= 8 && constraintCount < 11) {
+                                    gltColor(0.7f, 0.3f, 0.0f, 1.0f);  // Ijo
+                                } else if(constraintCount >= 11) {
+                                    gltColor(0.0f, 0.2f, 0.0f, 1.0f);  // Ijo
+                                }
                             } else {
                                 gltColor(1.0f, 0.0f, 0.0f, 1.0f);  // Merah
                             }
@@ -317,26 +369,68 @@ int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial
 int main(int argc, char *argv[])
 {
     int algoritma = -1;
+    std::string namaalgoritma = "";
     do {
+        std::cout << "=================MAGIC NUMBER CUBE SIMULATION====================" << std::endl;
         std::cout << "Algoritma apa yang diinginkan?" << std::endl;
-        std::cout << "(1) Steepest Ascent Hill Climbing" << std::endl;
-        std::cout << "(2) Simulated Annealing" << std::endl;
-        std::cout << "(3) Genetic Algorithm" << std::endl;
-        std::cout << "(4) EXIT" << std::endl;
+        std::cout << "(1) Perfect Magic Cube Example" << std::endl;
+        std::cout << "(2) Steepest Ascent Hill Climbing" << std::endl;
+        std::cout << "(3) Hill Climbing with Sideway Move" << std::endl;
+        std::cout << "(4) Random Restart Hill Climbing" << std::endl;
+        std::cout << "(5) Stochastic Hill Climbing" << std::endl;
+        std::cout << "(6) Simulated Annealing" << std::endl;
+        std::cout << "(7) Genetic Algorithm" << std::endl;
+        std::cout << "(8) EXIT" << std::endl;
+        std::cout << "================================================================" << std::endl;
         std::cin >> algoritma;
-        if(algoritma == 4){
+        if(algoritma < 1 && algoritma > 8 ){
+            std::cout << "INPUT TIDAK VALID!" << std::endl;
+        }else if(algoritma == 8){
             exit(0);
-        }
-        std::cout << "Loading Initial State..." << std::endl;
+        } else if (algoritma == 1){
+            displayState(perfectMagicCube, false);
+        } else {
+            std::cout << "Loading Initial State..." << std::endl;
         std::vector<std::vector<std::vector<int>>> initial_cube = initialize_random_cube();
         displayState(initial_cube, true);
         Result result;
         switch(algoritma){
-            case 1:
+            case 2:
                 result = steepest_ascent_hill_climbing(initial_cube);
+                namaalgoritma = "STEEPEST ASCENT HILL CLIMBING";
+                break;
+            case 3:
+                result = hill_climbing_with_sideway_moves(initial_cube, 1000);
+                namaalgoritma = "HILL CLIMBING WITH SIDEWAY MOVES";
+                break;
+            case 5:
+                result = stochastic_hill_climbing(initial_cube, 1000);
+                namaalgoritma = "STOCHASTIC HILL CLIMBING";
+                break;
+            case 6:
+                result = simulated_annealing(initial_cube);
+                namaalgoritma = "SIMULATED ANNEALING";
+                break;
+            case 7:
+                int N = 5; 
+                int ukuranPopulasi = 100;
+                int maxGenerasi = 10000; 
+                double tingkatCrossover = 0.8;
+                double tingkatMutasi = 0.05;   
+                result = algoritmaGenetik(N, ukuranPopulasi, maxGenerasi, tingkatCrossover, tingkatMutasi);
+                namaalgoritma = "GENETIC ALGORITHM";
+                break;
             //tambahin case masing masing lagi
         }
+        std::cout << "=================LOCAL SEARCH REPORT====================" << std::endl;
+        std::cout << "SEARCH ALGORITHM  :" << namaalgoritma << std::endl;
+        std::cout << "FINAL ERROR       : " << result.error << std::endl;
+        std::cout << "TIME ESTIMATED    : " << result.time_taken << " SECONDS" << std::endl;
+        std::cout << "STEPS TAKEN       : " << result.steps << std::endl;
+        std::cout << "========================================================" << std::endl;
+        std::cout << std::endl;
         displayState(result.cube, false);
+        }
         
     }
     while(true);

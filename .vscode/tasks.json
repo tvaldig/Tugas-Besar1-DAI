@@ -16,6 +16,8 @@
                 "${workspaceFolder}/src/simulated_annealing/sa.cpp",
                 "${workspaceFolder}/src/steepest_ascent_hl/sahl.cpp",
                 "${workspaceFolder}/src/sideway_move/sm.cpp",
+                "${workspaceFolder}/src/stochastic_hc/shc.cpp",
+                "${workspaceFolder}/src/genetic/ga.cpp",
                 "-lglfw3dll",
                 "-o",
                 "${workspaceFolder}/cube.exe"

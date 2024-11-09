@@ -217,3 +217,13 @@ bool isMagic3DDiagonal(const std::vector<std::vector<std::vector<int>>> &cube) {
     }
     return (sum1 == target_sum) || (sum2 == target_sum);
 }
+
+int countConstraints(const std::vector<std::vector<std::vector<int>>> &cube, int x, int y, int z) {
+    int count = 0;
+    if (isMagicRow(cube, x, y)) count++;
+    if (isMagicColumn(cube, x, z)) count++;
+    if (isMagicDiagonal(cube, x)) count++;
+    if (isMagicPillar(cube, y, z)) count++;
+    if (isMagic3DDiagonal(cube)) count++;
+    return count;
+}

@@ -4,6 +4,6 @@
 #include "../objfunc/obj.hpp"
 
 double scheduling(double t0, double cooling_rate, int iteration);
-Result simulated_annealing();
+Result simulated_annealing(std::vector<std::vector<std::vector<int>>> cube);
 
 #endif
