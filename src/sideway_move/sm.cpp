@@ -1,9 +1,8 @@
 #include "sm.hpp"
 
-Result hill_climbing_with_sideway_moves(int max_sideways_moves) {
+Result hill_climbing_with_sideway_moves(std::vector<std::vector<std::vector<int>>> cube, int max_sideways_moves) {
     Result result;
-    result.initial_cube = initialize_random_cube();
-    result.cube = result.initial_cube;
+    result.cube = cube;
     result.error = calculate_error(result.cube);
     result.steps = 0;
 
@@ -20,11 +19,12 @@ Result hill_climbing_with_sideway_moves(int max_sideways_moves) {
             int x1 = i1 / (N * N), y1 = (i1 / N) % N, z1 = i1 % N;
             for (int i2 = i1 + 1; i2 < N * N * N; ++i2) {
                 int x2 = i2 / (N * N), y2 = (i2 / N) % N, z2 = i2 % N;
-
                 auto neighbor = swap_elements(result.cube, x1, y1, z1, x2, y2, z2);
                 double neighbor_error = calculate_error(neighbor);
 
                 if (neighbor_error < best_error) {
+                    std::cout << "Error: " << neighbor_error << std::endl;
+                    std::cout << "Jumlah h: " << jumlahSkor(neighbor) << std::endl;
                     best_error = neighbor_error;
                     best_cube = neighbor;
                     sideway_moves = 0;

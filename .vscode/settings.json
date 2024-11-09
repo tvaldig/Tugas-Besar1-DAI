@@ -82,7 +82,9 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "list": "cpp",
+        "xhash": "cpp"
     },
     "cmake.sourceDirectory": "C:/Users/LENOVO/Documents/OneDrive/Documents/Kuliah Semester 5/Tugas-Besar1-DAI/include/glm",
     "C_Cpp.errorSquiggles": "disabled"
