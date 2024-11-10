@@ -304,13 +304,13 @@ int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial
                                     gltColor(0.0f, 1.0f, 0.0f, 1.0f);  // Ijo
                                 } else if (constraintCount >= 2 && constraintCount < 5)
                                 {
-                                    gltColor(0.3f, 0.7f, 0.0f, 1.0f);  // Ijo
+                                    gltColor(0.0f, 0.7f, 0.0f, 1.0f);  // Ijo
                                 } else if(constraintCount >= 5 && constraintCount < 8) {
-                                    gltColor(0.5f, 0.5f, 0.0f, 1.0f);  // Ijo
+                                    gltColor(0.0f, 0.5f, 0.0f, 1.0f);  // Ijo
                                 } else if(constraintCount >= 8 && constraintCount < 11) {
-                                    gltColor(0.7f, 0.3f, 0.0f, 1.0f);  // Ijo
+                                    gltColor(0.0f, 0.3f, 0.0f, 1.0f);  // Ijo
                                 } else if(constraintCount >= 11) {
-                                    gltColor(0.0f, 0.2f, 0.0f, 1.0f);  // Ijo
+                                    gltColor(0.0f, 1.0f, 1.0f, 1.0f);  // Ijo
                                 }
                             } else {
                                 gltColor(1.0f, 0.0f, 0.0f, 1.0f);  // Merah
@@ -401,21 +401,19 @@ int main(int argc, char *argv[])
                 break;
             case 3:
                 int sidewayMoves;
-                std::cout << "Masukkan jumlah maksimal sideway moves: ";
-                std::cin >> sidewayMoves;
+                std::cout << "Masukkan jumlah maksimal sideway moves: ", std::cin >> sidewayMoves;
                 result = hill_climbing_with_sideway_moves(initial_cube, sidewayMoves);
                 namaalgoritma = "HILL CLIMBING WITH SIDEWAY MOVES";
                 break;
             case 4:
                 int max_restart;
-                std::cout << "MASUKKAN MAX RESTART  : ", std::cin >> max_restart;
+                std::cout << "Masukkan maksimal restart  : ", std::cin >> max_restart;
                 result = random_restart_hill_climbing(initial_cube, max_restart);
                 namaalgoritma = "RANDOM RESTART HILL CLIMBING";
                 break;
             case 5:
                 int stochasticMoves;
-                std::cout << "Masukkan jumlah maksimal iterasi untuk stochastic hill climbing: ";
-                std::cin >> stochasticMoves;
+                std::cout << "Masukkan jumlah maksimal iterasi untuk stochastic hill climbing: ", std::cin >> stochasticMoves;
                 result = stochastic_hill_climbing(initial_cube, stochasticMoves);
                 namaalgoritma = "STOCHASTIC HILL CLIMBING";
                 break;
