@@ -3,8 +3,7 @@
 #include <chrono>
 #include <iostream>
 
-std::vector<std::vector<std::vector<int>>> random_neighbor(
-    const std::vector<std::vector<std::vector<int>>>& cube) {
+std::vector<std::vector<std::vector<int>>> random_neighbor(const std::vector<std::vector<std::vector<int>>>& cube) {
     int x1, y1, z1, x2, y2, z2;
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -38,7 +37,6 @@ Result stochastic_hill_climbing(std::vector<std::vector<std::vector<int>>> cube,
         if (neighbor_error < result.error) {
             result.cube = neighbor;
             result.error = neighbor_error;
-            // result.steps++;
             error_history.push_back(result.error);
             std::cout << "Stochastic Hill Climbing" << std::endl;
             std::cout << "Iterasi ke-" << result.steps+1 << std::endl;

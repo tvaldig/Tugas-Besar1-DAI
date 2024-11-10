@@ -17,8 +17,6 @@ struct Individual {
 };
 
 int calculateMagicSum(int N);
-int jumlahSkor(const std::vector<std::vector<std::vector<int>>>& cube);
-double calculate_error(const std::vector<std::vector<std::vector<int>>>& cube);
 
 std::vector<Individual> initializePopulation(int populationSize, int N, int target_sum);
 Individual selectParent(const std::vector<Individual>& population);
