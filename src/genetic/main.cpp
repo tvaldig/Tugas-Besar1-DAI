@@ -3,15 +3,16 @@
 
 int main() {
     int N = 5;
-    int ukuranPopulasi = 100;
-    int maxGenerasi = 10000;
-    double tingkatCrossover = 0.8;
-    double tingkatMutasi = 0.05;
+    int populationSize = 100;
+    int maxGenerations = 100000;
+    double crossoverRate = 0.8;
+    double mutationRate = 0.05;
 
-    Hasil hasil = algoritmaGenetik(N, ukuranPopulasi, maxGenerasi, tingkatCrossover, tingkatMutasi);
+    Result result = geneticAlgorithm(N, populationSize, maxGenerations, crossoverRate, mutationRate);
 
-    std::cout << "Waktu Eksekusi: " << hasil.waktuEksekusi << " detik" << std::endl;
-    std::cout << "Error Akhir: " << hasil.errorAkhir << std::endl;
+    std::cout << "Execution Time: " << result.time_taken << " seconds" << std::endl;
+    std::cout << "Final Score: " << jumlahSkor(result.cube) << std::endl;
+    std::cout << "Final Error: " << result.error << std::endl;
 
     return 0;
 }

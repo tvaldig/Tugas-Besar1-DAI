@@ -4,173 +4,241 @@
 #include <algorithm>
 #include <random>
 #include <iostream>
+#include <chrono>
 
-Individu::Individu(const std::vector<int>& kromosom) : kromosom(kromosom), fitness(0.0) {}
-
-void Individu::hitungFitness(int N, int magicSum) {
-    std::vector<std::vector<std::vector<int>>> kubus(N, std::vector<std::vector<int>>(N, std::vector<int>(N)));
-    int indeks = 0;
+Individual::Individual(const std::vector<int>& chromosome, int N, int target_sum) : chromosome(chromosome), fitness(0.0) {
+    cube = std::vector<std::vector<std::vector<int>>>(N, std::vector<std::vector<int>>(N, std::vector<int>(N)));
+    int index = 0;
     for (int layer = 0; layer < N; ++layer)
         for (int row = 0; row < N; ++row)
             for (int col = 0; col < N; ++col)
-                kubus[layer][row][col] = kromosom[indeks++];
-
-    double totalDifference = 0.0;
-    for (int i = 0; i < N; ++i)
-        for (int j = 0; j < N; ++j) {
-            int sumRow = 0, sumCol = 0, sumPillar = 0;
-            for (int k = 0; k < N; ++k) {
-                sumRow += kubus[i][j][k];
-                sumCol += kubus[i][k][j];
-                sumPillar += kubus[k][i][j];
-            }
-            totalDifference += std::abs(magicSum - sumRow);
-            totalDifference += std::abs(magicSum - sumCol);
-            totalDifference += std::abs(magicSum - sumPillar);
-        }
-    
-    int sumDiag1 = 0, sumDiag2 = 0, sumDiag3 = 0, sumDiag4 = 0;
-    for (int i = 0; i < N; ++i) {
-        sumDiag1 += kubus[i][i][i];
-        sumDiag2 += kubus[i][i][N - i - 1];
-        sumDiag3 += kubus[i][N - i - 1][i];
-        sumDiag4 += kubus[N - i - 1][i][i];
-    }
-    totalDifference += std::abs(magicSum - sumDiag1);
-    totalDifference += std::abs(magicSum - sumDiag2);
-    totalDifference += std::abs(magicSum - sumDiag3);
-    totalDifference += std::abs(magicSum - sumDiag4);
-    
-    fitness = 1.0 / (1.0 + totalDifference);
+                cube[layer][row][col] = chromosome[index++];
+    calculateFitness(N, target_sum);
 }
 
-int hitungMagicSum(int N) {
+void Individual::calculateFitness(int N, int target_sum) {
+    int score = jumlahSkor(cube);
+    fitness = score / static_cast<double>(N * N * 3 + N * 2 + 4);
+}
+
+int calculateMagicSum(int N) {
     return (N * (N * N * N + 1)) / 2;
 }
 
-std::vector<Individu> inisialisasiPopulasi(int ukuranPopulasi, int N) {
-    std::vector<Individu> populasi;
-    std::vector<int> kromosomDasar(N * N * N);
+int jumlahSkor(const std::vector<std::vector<std::vector<int>>>& cube) {
+    int sum = 0;
+    int target_sum = calculateMagicSum(cube.size());
+    int N = cube.size();
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            int row_sum = 0, col_sum = 0, pillar_sum = 0;
+            for (int k = 0; k < N; ++k) {
+                row_sum += cube[i][j][k];
+                col_sum += cube[i][k][j];
+                pillar_sum += cube[k][i][j];
+            }
+            if (row_sum == target_sum) sum++;
+            if (col_sum == target_sum) sum++;
+            if (pillar_sum == target_sum) sum++;
+        }
+    }
+
+    for (int k = 0; k < N; ++k) {
+        int diag1 = 0, diag2 = 0;
+        for (int i = 0; i < N; ++i) {
+            diag1 += cube[i][i][k];
+            diag2 += cube[i][N - 1 - i][k];
+        }
+        if (diag1 == target_sum) sum++;
+        if (diag2 == target_sum) sum++;
+    }
+
+    for (int j = 0; j < N; ++j) {
+        int diag1 = 0, diag2 = 0;
+        for (int i = 0; i < N; ++i) {
+            diag1 += cube[i][j][i];
+            diag2 += cube[i][j][N - 1 - i];
+        }
+        if (diag1 == target_sum) sum++;
+        if (diag2 == target_sum) sum++;
+    }
+
+    for (int i = 0; i < N; ++i) {
+        int diag1 = 0, diag2 = 0;
+        for (int j = 0; j < N; ++j) {
+            diag1 += cube[i][j][j];
+            diag2 += cube[i][j][N - 1 - j];
+        }
+        if (diag1 == target_sum) sum++;
+        if (diag2 == target_sum) sum++;
+    }
+
+    int diag1 = 0, diag2 = 0, diag3 = 0, diag4 = 0;
+    for (int i = 0; i < N; ++i) {
+        diag1 += cube[i][i][i];
+        diag2 += cube[i][i][N - 1 - i];
+        diag3 += cube[i][N - 1 - i][i];
+        diag4 += cube[i][N - 1 - i][N - 1 - i];
+    }
+    if (diag1 == target_sum) sum++;
+    if (diag2 == target_sum) sum++;
+    if (diag3 == target_sum) sum++;
+    if (diag4 == target_sum) sum++;
+
+    return sum;
+}
+
+double calculate_error(const std::vector<std::vector<std::vector<int>>>& cube) {
+    int N = cube.size();
+    double M = (N * (pow(N, 3) + 1)) / 2;
+    double error_total = 0;
+
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            double row_sum = 0, col_sum = 0, pillar_sum = 0;
+            for (int k = 0; k < N; ++k) {
+                row_sum += cube[i][j][k];
+                col_sum += cube[i][k][j];
+                pillar_sum += cube[k][i][j];
+            }
+            error_total += std::abs(M - row_sum) + std::abs(M - col_sum) + std::abs(M - pillar_sum);
+        }
+    }
+    return error_total;
+}
+
+std::vector<Individual> initializePopulation(int populationSize, int N, int target_sum) {
+    std::vector<Individual> population;
+    std::vector<int> baseChromosome(N * N * N);
     for (int i = 0; i < N * N * N; ++i)
-        kromosomDasar[i] = i + 1;
+        baseChromosome[i] = i + 1;
 
     std::random_device rd;
     std::mt19937 g(rd());
-    for (int i = 0; i < ukuranPopulasi; ++i) {
-        std::vector<int> kromosom = kromosomDasar;
-        std::shuffle(kromosom.begin(), kromosom.end(), g);
-        populasi.emplace_back(kromosom);
+    for (int i = 0; i < populationSize; ++i) {
+        std::vector<int> chromosome = baseChromosome;
+        std::shuffle(chromosome.begin(), chromosome.end(), g);
+        population.emplace_back(chromosome, N, target_sum);
     }
-    return populasi;
+    return population;
 }
 
-Individu seleksi(const std::vector<Individu>& populasi) {
+Individual selectParent(const std::vector<Individual>& population) {
     double totalFitness = 0.0;
-    for (const auto& individu : populasi)
-        totalFitness += individu.fitness;
+    for (const auto& individual : population)
+        totalFitness += individual.fitness;
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> distribusi(0.0, totalFitness);
-    double nilaiRandom = distribusi(gen);
-    double kumulatifFitness = 0.0;
+    std::uniform_real_distribution<double> distribution(0.0, totalFitness);
+    double randomValue = distribution(gen);
+    double cumulativeFitness = 0.0;
 
-    for (const auto& individu : populasi) {
-        kumulatifFitness += individu.fitness;
-        if (kumulatifFitness >= nilaiRandom)
-            return individu;
+    for (const auto& individual : population) {
+        cumulativeFitness += individual.fitness;
+        if (cumulativeFitness >= randomValue)
+            return individual;
     }
-    return populasi.back();
+    return population.back();
 }
 
-std::pair<Individu, Individu> crossover(const Individu& parent1, const Individu& parent2) {
-    int ukuran = parent1.kromosom.size();
-    std::vector<int> kromosomAnak1(ukuran), kromosomAnak2(ukuran);
-    std::vector<int> indeks(ukuran, -1);
-    std::vector<bool> visited(ukuran, false);
-    int siklus = 1;
+std::pair<Individual, Individual> performCrossover(const Individual& parent1, const Individual& parent2) {
+    int size = parent1.chromosome.size();
+    std::vector<int> childChromosome1(size), childChromosome2(size);
+    std::vector<int> indices(size, -1);
+    std::vector<bool> visited(size, false);
+    int cycle = 1;
 
-    for (int i = 0; i < ukuran; ++i) {
+    for (int i = 0; i < size; ++i) {
         if (!visited[i]) {
-            int saatIni = i;
+            int currentIndex = i;
             do {
-                indeks[saatIni] = siklus;
-                visited[saatIni] = true;
-                int value = parent2.kromosom[saatIni];
-                saatIni = std::distance(parent1.kromosom.begin(), std::find(parent1.kromosom.begin(), parent1.kromosom.end(), value));
-            } while (saatIni != i);
-            siklus++;
+                indices[currentIndex] = cycle;
+                visited[currentIndex] = true;
+                int value = parent2.chromosome[currentIndex];
+                currentIndex = std::distance(parent1.chromosome.begin(), std::find(parent1.chromosome.begin(), parent1.chromosome.end(), value));
+            } while (currentIndex != i);
+            cycle++;
         }
     }
 
-    for (int i = 0; i < ukuran; ++i) {
-        if (indeks[i] % 2 == 1) {
-            kromosomAnak1[i] = parent1.kromosom[i];
-            kromosomAnak2[i] = parent2.kromosom[i];
+    for (int i = 0; i < size; ++i) {
+        if (indices[i] % 2 == 1) {
+            childChromosome1[i] = parent1.chromosome[i];
+            childChromosome2[i] = parent2.chromosome[i];
         } else {
-            kromosomAnak1[i] = parent2.kromosom[i];
-            kromosomAnak2[i] = parent1.kromosom[i];
+            childChromosome1[i] = parent2.chromosome[i];
+            childChromosome2[i] = parent1.chromosome[i];
         }
     }
-    return {Individu(kromosomAnak1), Individu(kromosomAnak2)};
+    return {Individual(childChromosome1, parent1.cube.size(), calculateMagicSum(parent1.cube.size())), 
+            Individual(childChromosome2, parent1.cube.size(), calculateMagicSum(parent1.cube.size()))};
 }
 
-void mutasi(Individu& individu, double tingkatMutasi) {
+void performMutation(Individual& individual, double mutationRate) {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> distribusi(0.0, 1.0);
-    std::uniform_int_distribution<> distribusiIndeks(0, individu.kromosom.size() - 1);
+    std::uniform_real_distribution<> distribution(0.0, 1.0);
 
-    if (distribusi(gen) < tingkatMutasi) {
-        int indeks1 = distribusiIndeks(gen);
-        int indeks2 = distribusiIndeks(gen);
-        std::swap(individu.kromosom[indeks1], individu.kromosom[indeks2]);
+    if (distribution(gen) < mutationRate) {
+        std::uniform_int_distribution<> indexDist(0, individual.chromosome.size() - 1);
+        int index1 = indexDist(gen), index2 = indexDist(gen);
+        std::swap(individual.chromosome[index1], individual.chromosome[index2]);
     }
 }
 
-Result algoritmaGenetik(int N, int ukuranPopulasi, int maxGenerasi, double tingkatCrossover, double tingkatMutasi) {
-    Result hasil;
-    int magicSum = hitungMagicSum(N);
-    auto populasi = inisialisasiPopulasi(ukuranPopulasi, N);
+Result geneticAlgorithm(int N, int populationSize, int maxGenerations, double crossoverRate, double mutationRate) {
+    Result result;
+    int target_sum = calculateMagicSum(N);
+    auto population = initializePopulation(populationSize, N, target_sum);
 
-    for (auto& individu : populasi)
-        individu.hitungFitness(N, magicSum);
+    Individual bestIndividual = population[0];
+    auto startTime = std::chrono::high_resolution_clock::now();
 
-    Individu terbaik = populasi[0];
-    auto waktuMulai = std::chrono::high_resolution_clock::now();
+    for (int generation = 0; generation < maxGenerations; ++generation) {
+        std::vector<Individual> newPopulation;
+        newPopulation.push_back(bestIndividual);
 
-    for (int gen = 0; gen < maxGenerasi; ++gen) {
-        std::vector<Individu> populasiBaru;
-        populasiBaru.push_back(terbaik);
-
-        while (populasiBaru.size() < ukuranPopulasi) {
-            auto parent1 = seleksi(populasi);
-            auto parent2 = seleksi(populasi);
+        while (newPopulation.size() < populationSize) {
+            auto parent1 = selectParent(population);
+            auto parent2 = selectParent(population);
 
             std::random_device rd;
             std::mt19937 gen(rd());
-            std::uniform_real_distribution<> distribusi(0.0, 1.0);
+            std::uniform_real_distribution<> distribution(0.0, 1.0);
 
-            auto anak = distribusi(gen) < tingkatCrossover ? crossover(parent1, parent2) : std::make_pair(parent1, parent2);
-            mutasi(anak.first, tingkatMutasi);
-            mutasi(anak.second, tingkatMutasi);
-            anak.first.hitungFitness(N, magicSum);
-            anak.second.hitungFitness(N, magicSum);
-            populasiBaru.push_back(anak.first);
-            if (populasiBaru.size() < ukuranPopulasi)
-                populasiBaru.push_back(anak.second);
+            auto children = distribution(gen) < crossoverRate ? performCrossover(parent1, parent2) : std::make_pair(parent1, parent2);
+            performMutation(children.first, mutationRate);
+            performMutation(children.second, mutationRate);
+            children.first.calculateFitness(N, target_sum);
+            children.second.calculateFitness(N, target_sum);
+            newPopulation.push_back(children.first);
+            if (newPopulation.size() < populationSize)
+                newPopulation.push_back(children.second);
         }
-        populasi = populasiBaru;
+        population = newPopulation;
 
-        for (const auto& individu : populasi) {
-            if (individu.fitness > terbaik.fitness)
-                terbaik = individu;
+        for (const auto& individual : population) {
+            if (individual.fitness > bestIndividual.fitness)
+                bestIndividual = individual;
         }
-        hasil.error = 1.0 / terbaik.fitness - 1.0;
-        hasil.error_history.push_back(hasil.error);
-        hasil.steps = gen + 1;
-        if (terbaik.fitness >= 1.0)
+        result.error = calculate_error(bestIndividual.cube);
+        result.error_history.push_back(result.error);
+        result.steps = generation + 1;
+
+        int currentScore = jumlahSkor(bestIndividual.cube);
+        std::cout << "Generation: " << generation + 1 
+                  << ", Score: " << currentScore 
+                  << ", Error: " << result.error 
+                  << std::endl;
+
+        if (currentScore == N * N * 3 + N * 2 + 4)
             break;
     }
-    return hasil;
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    result.time_taken = std::chrono::duration<double>(endTime - startTime).count();
+    result.cube = bestIndividual.cube;
+
+    return result;
 }
