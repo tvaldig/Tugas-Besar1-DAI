@@ -3,13 +3,15 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++.exe build active file",
+            "label": "C/C++: g++.exe build active file with matplotlib-cpp",
             "command": "C:/msys64/ucrt64/bin/g++.exe",
             "args": [
                 "-g",
                 "-std=c++17",
-                "-I${workspaceFolder}/include",
+                "-I${workspaceFolder}/include", 
+                "-I${workspaceFolder}/include/matplotlibcpp", 
                 "-L${workspaceFolder}/lib",
+                "-L/path/to/python3.12/libs", 
                 "${workspaceFolder}/src/main.cpp",
                 "${workspaceFolder}/src/glad.c",
                 "${workspaceFolder}/src/objfunc/obj.cpp",
@@ -19,7 +21,7 @@
                 "${workspaceFolder}/src/sideway_move/sm.cpp",
                 "${workspaceFolder}/src/stochastic_hc/shc.cpp",
                 "${workspaceFolder}/src/genetic/ga.cpp",
-                "-lglfw3dll",
+                "-lglfw3dll",    
                 "-o",
                 "${workspaceFolder}/cube.exe"
             ],
@@ -33,7 +35,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "compiler: C:/msys64/mingw64/bin/g++.exe"
+            "detail": "compiler: C:/msys64/ucrt64/bin/g++.exe"
         },
         {
             "type": "cppbuild",

@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
                 int maxGenerasi = 10000; 
                 double tingkatCrossover = 0.8;
                 double tingkatMutasi = 0.05;   
-                result = algoritmaGenetik(N, ukuranPopulasi, maxGenerasi, tingkatCrossover, tingkatMutasi);
+                result = geneticAlgorithm(N, ukuranPopulasi, maxGenerasi, tingkatCrossover, tingkatMutasi);
                 namaalgoritma = "GENETIC ALGORITHM";
                 break;
             //tambahin case masing masing lagi

@@ -4,13 +4,8 @@
 #include <vector>
 #include <chrono>
 
-struct Result {
-    double error;
-    int steps;
-    double time_taken;
-    std::vector<std::vector<std::vector<int>>> cube;
-    std::vector<double> error_history;
-};
+#include "../objfunc/obj.hpp"
+
 
 struct Individual {
     std::vector<int> chromosome;
