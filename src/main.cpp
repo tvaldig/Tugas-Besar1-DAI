@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
                 result = hill_climbing_with_sideway_moves(initial_cube, sidewayMoves);
                 namaalgoritma = "HILL CLIMBING WITH SIDEWAY MOVES";
                 break;
-            case 5: 
+            case 5:
                 int stochasticMoves;
                 std::cout << "Masukkan jumlah maksimal iterasi untuk stochastic hill climbing: ";
                 std::cin >> stochasticMoves;

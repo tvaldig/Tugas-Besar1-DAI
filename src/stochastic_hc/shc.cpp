@@ -31,16 +31,17 @@ Result stochastic_hill_climbing(std::vector<std::vector<std::vector<int>>> cube,
 
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    for (int iter = 0; iter < max_iterations; ++iter) {
+    for (result.steps = 0; result.steps < max_iterations; ++result.steps) {
         auto neighbor = random_neighbor(result.cube);
         double neighbor_error = calculate_error(neighbor);
 
         if (neighbor_error < result.error) {
             result.cube = neighbor;
             result.error = neighbor_error;
-            result.steps++;
+            // result.steps++;
             error_history.push_back(result.error);
             std::cout << "Stochastic Hill Climbing" << std::endl;
+            std::cout << "Iterasi ke-" << result.steps+1 << std::endl;
             std::cout << "Jumlah h: " << jumlahSkor(result.cube) << std::endl;
             std::cout << "Jumlah Error: " << result.error << std::endl;
 
@@ -54,13 +55,6 @@ Result stochastic_hill_climbing(std::vector<std::vector<std::vector<int>>> cube,
     result.time_taken = std::chrono::duration<double>(end_time - start_time).count();
     result.error_history = error_history;
     
+    std::cout << "Banyak iterasi  : " << result.steps << std::endl;
     return result;
 }
-
-// int main() {
-//     std::srand(static_cast<unsigned int>(std::time(0)));
-//     auto cube = initialize_random_cube();
-//     Result rsult = stochastic_hill_climbing(cube, 100000);
-    
-//     return 0;
-// }
