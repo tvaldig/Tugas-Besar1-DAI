@@ -1,4 +1,5 @@
 #include "ga.hpp"
+#include "../objfunc/obj.hpp"
 #include <cmath>
 #include <vector>
 #include <algorithm>
@@ -17,12 +18,7 @@ Individual::Individual(const std::vector<int>& chromosome, int N, int target_sum
 }
 
 void Individual::calculateFitness(int N, int target_sum) {
-    int score = jumlahSkor(cube);
-    fitness = score / static_cast<double>(N * N * 3 + N * 2 + 4);
-}
-
-int calculateMagicSum(int N) {
-    return (N * (N * N * N + 1)) / 2;
+    fitness = 1.0 / (1.0 + calculate_error(cube)); 
 }
 
 std::vector<Individual> initializePopulation(int populationSize, int N, int target_sum) {
@@ -89,8 +85,8 @@ std::pair<Individual, Individual> performCrossover(const Individual& parent1, co
             childChromosome2[i] = parent1.chromosome[i];
         }
     }
-    return {Individual(childChromosome1, parent1.cube.size(), calculateMagicSum(parent1.cube.size())), 
-            Individual(childChromosome2, parent1.cube.size(), calculateMagicSum(parent1.cube.size()))};
+    return {Individual(childChromosome1, parent1.cube.size(), target_sum), 
+            Individual(childChromosome2, parent1.cube.size(), target_sum)};
 }
 
 void performMutation(Individual& individual, double mutationRate) {
@@ -107,7 +103,7 @@ void performMutation(Individual& individual, double mutationRate) {
 
 Result geneticAlgorithm(int N, int populationSize, int maxGenerations, double crossoverRate, double mutationRate) {
     Result result;
-    int target_sum = calculateMagicSum(N);
+    int target_sum = target_sum;
     auto population = initializePopulation(populationSize, N, target_sum);
 
     Individual bestIndividual = population[0];
