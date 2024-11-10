@@ -23,7 +23,6 @@ Result steepest_ascent_hill_climbing(std::vector<std::vector<std::vector<int>>> 
                 double neighbor_error = calculate_error(neighbor);
 
                 if (neighbor_error < best_error) {
-                    std::cout<< "steepest ascent hill climbing" << std::endl;
                     std::cout << "Error: " << neighbor_error << std::endl;
                     std::cout << "Jumlah h: " << jumlahSkor(neighbor) << std::endl;
                     best_error = neighbor_error;

@@ -10,10 +10,11 @@
 #define GLT_IMPLEMENTATION
 #include "gltext.h" /* https://github.com/vallentin/glText */
 
-#include "objfunc/obj.hpp"
+#include "objfunc/obj.hpp" /*Objective Function & Helper Functions*/
 #include "simulated_annealing/sa.hpp" /* Simulated Annealing */
 #include "steepest_ascent_hl/sahl.hpp" /* Steepest Ascent Hill Climbing*/
 #include "sideway_move/sm.hpp" /* Hill Climbing Sideway Move*/
+#include "random_restart/rr.hpp" /* Random Restart Hill Climbing*/
 #include "stochastic_hc/shc.hpp" /* Stochastic Hill Climbing*/
 #include "genetic/ga.hpp" /* Genetic Algortihm */
 
@@ -260,7 +261,6 @@ int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial
     for (int x = -2; x <= 2; ++x) {
             for (int y = -2; y <= 2; ++y) {
                 for (int z = -2; z <= 2; ++z) {
-                    //int i = x + 2, j = y + 2, k = z + 2;
                     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
                     glm::mat4 transform = projection * view * model;
                     unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
         std::cout << "(8) EXIT" << std::endl;
         std::cout << "================================================================" << std::endl;
         std::cin >> algoritma;
-        if(algoritma < 1 && algoritma > 8 ){
+        if(algoritma < 1 or algoritma > 8 ){
             std::cout << "INPUT TIDAK VALID!" << std::endl;
         }else if(algoritma == 8){
             exit(0);
@@ -402,6 +402,12 @@ int main(int argc, char *argv[])
             case 3:
                 result = hill_climbing_with_sideway_moves(initial_cube, 1000);
                 namaalgoritma = "HILL CLIMBING WITH SIDEWAY MOVES";
+                break;
+            case 4:
+                int max_restart;
+                std::cout << "MASUKKAN MAX RESTART  : ", std::cin >> max_restart;
+                result = random_restart_hill_climbing(initial_cube, max_restart);
+                namaalgoritma = "RANDOM RESTART HILL CLIMBING";
                 break;
             case 5:
                 result = stochastic_hill_climbing(initial_cube, 1000);
@@ -422,12 +428,12 @@ int main(int argc, char *argv[])
                 break;
             //tambahin case masing masing lagi
         }
-        std::cout << "=================LOCAL SEARCH REPORT====================" << std::endl;
-        std::cout << "SEARCH ALGORITHM  :" << namaalgoritma << std::endl;
+        std::cout << "=====================LOCAL SEARCH REPORT========================" << std::endl;
+        std::cout << "SEARCH ALGORITHM  : " << namaalgoritma << std::endl;
         std::cout << "FINAL ERROR       : " << result.error << std::endl;
         std::cout << "TIME ESTIMATED    : " << result.time_taken << " SECONDS" << std::endl;
         std::cout << "STEPS TAKEN       : " << result.steps << std::endl;
-        std::cout << "========================================================" << std::endl;
+        std::cout << "================================================================" << std::endl;
         std::cout << std::endl;
         displayState(result.cube, false);
         }

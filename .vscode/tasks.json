@@ -15,6 +15,7 @@
                 "${workspaceFolder}/src/objfunc/obj.cpp",
                 "${workspaceFolder}/src/simulated_annealing/sa.cpp",
                 "${workspaceFolder}/src/steepest_ascent_hl/sahl.cpp",
+                "${workspaceFolder}/src/random_restart/rr.cpp",
                 "${workspaceFolder}/src/sideway_move/sm.cpp",
                 "${workspaceFolder}/src/stochastic_hc/shc.cpp",
                 "${workspaceFolder}/src/genetic/ga.cpp",
