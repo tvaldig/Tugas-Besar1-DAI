@@ -400,11 +400,17 @@ int main(int argc, char *argv[])
                 namaalgoritma = "STEEPEST ASCENT HILL CLIMBING";
                 break;
             case 3:
-                result = hill_climbing_with_sideway_moves(initial_cube, 1000);
+                int sidewayMoves;
+                std::cout << "Masukkan jumlah maksimal sideway moves: ";
+                std::cin >> sidewayMoves;
+                result = hill_climbing_with_sideway_moves(initial_cube, sidewayMoves);
                 namaalgoritma = "HILL CLIMBING WITH SIDEWAY MOVES";
                 break;
-            case 5:
-                result = stochastic_hill_climbing(initial_cube, 1000);
+            case 5: 
+                int stochasticMoves;
+                std::cout << "Masukkan jumlah maksimal iterasi untuk stochastic hill climbing: ";
+                std::cin >> stochasticMoves;
+                result = stochastic_hill_climbing(initial_cube, stochasticMoves);
                 namaalgoritma = "STOCHASTIC HILL CLIMBING";
                 break;
             case 6:
