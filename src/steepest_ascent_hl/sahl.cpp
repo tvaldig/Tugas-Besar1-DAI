@@ -8,12 +8,13 @@ Result steepest_ascent_hill_climbing(std::vector<std::vector<std::vector<int>>> 
 
     bool improvement = true;
     auto start_time = std::chrono::high_resolution_clock::now();
-
+    result.objfunc.push_back(result.error);
+    result.iterasi.push_back(result.steps + 1);
     while (improvement) {
         improvement = false;
         auto best_cube = result.cube;
         double best_error = result.error;
-
+        
         for (int i1 = 0; i1 < N * N * N - 1; ++i1) {
             int x1 = i1 / (N * N), y1 = (i1 / N) % N, z1 = i1 % N;
             for (int i2 = i1 + 1; i2 < N * N * N; ++i2) {
@@ -25,6 +26,8 @@ Result steepest_ascent_hill_climbing(std::vector<std::vector<std::vector<int>>> 
                 if (neighbor_error < best_error) {
                     std::cout << "Error: " << neighbor_error << std::endl;
                     std::cout << "Jumlah h: " << jumlahSkor(neighbor) << std::endl;
+                    
+                    
                     best_error = neighbor_error;
                     best_cube = neighbor;
                 }
@@ -36,8 +39,10 @@ Result steepest_ascent_hill_climbing(std::vector<std::vector<std::vector<int>>> 
             result.error = best_error;
             result.steps++;
             improvement = true;
+           
         }
-
+        result.objfunc.push_back(result.error);
+        result.iterasi.push_back(result.steps + 1);
         if (result.error == 0) break;
     }
 

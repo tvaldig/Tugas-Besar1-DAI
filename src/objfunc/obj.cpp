@@ -227,3 +227,22 @@ int countConstraints(const std::vector<std::vector<std::vector<int>>> &cube, int
     if (isMagic3DDiagonal(cube)) count++;
     return count;
 }
+
+namespace plt = matplotlibcpp;
+
+void displayGraph(Result result) {
+
+    _putenv_s("PYTHONHOME", "C:/Python312");
+    _putenv_s("PYTHONPATH", "C:/Python312/Lib;C:/Python312/Lib/site-packages");
+
+    Py_Initialize();
+
+    plt::plot(result.objfunc, result.iterasi);
+    plt::xlabel("Iteration");
+    plt::ylabel("Objective Function (Error)");
+    plt::title("Objective Function over Iterations");
+    plt::show();
+    plt::clf();
+    plt::close();
+    Py_Finalize();
+}

@@ -3,15 +3,25 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++.exe build active file with matplotlib-cpp",
+            "label": "C/C++: g++.exe build with matplotlib-cpp and Python integration",
             "command": "C:/msys64/ucrt64/bin/g++.exe",
             "args": [
                 "-g",
                 "-std=c++17",
-                "-I${workspaceFolder}/include", 
-                "-I${workspaceFolder}/include/matplotlibcpp", 
+                "-I${workspaceFolder}/include",
+                "-I${workspaceFolder}/include/matplotlibcpp",
+                "-I${workspaceFolder}/include/objfunc",
+                "-I${workspaceFolder}/include/simulated_annealing",
+                "-I${workspaceFolder}/include/steepest_ascent_hl",
+                "-I${workspaceFolder}/include/random_restart",
+                "-I${workspaceFolder}/include/sideway_move",
+                "-I${workspaceFolder}/include/stochastic_hc",
+                "-I${workspaceFolder}/include/genetic",
+                "-I${workspaceFolder}/include/glad",
+                "-I", "C:/Python312/include",
+                "-I", "C:/Users/LENOVO/AppData/Roaming/Python/Python312/site-packages/numpy/_core/include",
                 "-L${workspaceFolder}/lib",
-                "-L/path/to/python3.12/libs", 
+                "-L", "C:/Python312/libs",
                 "${workspaceFolder}/src/main.cpp",
                 "${workspaceFolder}/src/glad.c",
                 "${workspaceFolder}/src/objfunc/obj.cpp",
@@ -20,10 +30,13 @@
                 "${workspaceFolder}/src/random_restart/rr.cpp",
                 "${workspaceFolder}/src/sideway_move/sm.cpp",
                 "${workspaceFolder}/src/stochastic_hc/shc.cpp",
-                "${workspaceFolder}/src/genetic/ga.cpp",
-                "-lglfw3dll",    
+                "${workspaceFolder}/src/genetic/ga.cpp", 
+                "-lpython312",  
+                "-Wno-deprecated-declarations",
+                "-lglfw3dll",
                 "-o",
                 "${workspaceFolder}/cube.exe"
+
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -35,7 +48,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "compiler: C:/msys64/ucrt64/bin/g++.exe"
+            "detail": "Build with g++, Python, and matplotlib-cpp integration"
         },
         {
             "type": "cppbuild",

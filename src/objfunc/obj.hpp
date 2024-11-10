@@ -6,6 +6,7 @@
 #include <cmath>
 #include <chrono>
 #include <iostream>
+#include "matplotlibcpp.h"
 
 const int N = 5;
 const int VAL = 125;
@@ -17,6 +18,8 @@ struct Result {
     double time_taken;
     std::vector<std::vector<std::vector<int>>> cube;
     std::vector<double> error_history;
+    std::vector<double> iterasi;  
+    std::vector<double> objfunc; 
 };
 
 std::vector<std::vector<std::vector<std::vector<int>>>> generate_neighbors(const std::vector<std::vector<std::vector<int>>>& cube);
@@ -37,4 +40,5 @@ bool isMagicPillar(const std::vector<std::vector<std::vector<int>>> &cube, int r
 bool isMagic3DDiagonal(const std::vector<std::vector<std::vector<int>>> &cube);
 int countConstraints(const std::vector<std::vector<std::vector<int>>> &cube, int x, int y, int z);
 
+void displayGraph(Result result);
 #endif

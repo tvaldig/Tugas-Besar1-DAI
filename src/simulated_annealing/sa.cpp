@@ -59,6 +59,8 @@ Result simulated_annealing(std::vector<std::vector<std::vector<int>>> cube) {
         if (result.error == 0) {
             break;
         }
+        result.objfunc.push_back(result.error);
+        result.iterasi.push_back(i);
     }
 
 

@@ -9,7 +9,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #define GLT_IMPLEMENTATION
 #include "gltext.h" /* https://github.com/vallentin/glText */
-
 #include "objfunc/obj.hpp" /*Objective Function & Helper Functions*/
 #include "simulated_annealing/sa.hpp" /* Simulated Annealing */
 #include "steepest_ascent_hl/sahl.hpp" /* Steepest Ascent Hill Climbing*/
@@ -367,7 +366,7 @@ int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial
     
 
 int main(int argc, char *argv[])
-{
+{   
     int algoritma = -1;
     std::string namaalgoritma = "";
     do {
@@ -440,6 +439,7 @@ int main(int argc, char *argv[])
         std::cout << "================================================================" << std::endl;
         std::cout << std::endl;
         displayState(result.cube, false);
+        displayGraph(result);
         }
         
     }
