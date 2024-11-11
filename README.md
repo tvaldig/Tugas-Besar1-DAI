@@ -39,19 +39,15 @@ Repository ini terbagi menjadi 2 branch :
 ### Prerequisites
 
 - Standard **g++ compiler library**
-- **Python** versi 3.12 dengan library matplotlib
+- **Python** versi 3.12 dengan library matplotlib **(Optional untuk Branch without-plot)**
   
-### Installation
+### Installation and Run Program
 
 1. **Clone Repository**
    ```bash
    git clone https://github.com/tvaldig/Tugas-Besar1-DAI.git
-   cd Tugas-Besar1-DAI
    
-2. **Build the Project** :
-   ctrl + shift + b
-   
-4. **Run the program**
+2. **Run the program**
    ```bash
    ./cube
 
