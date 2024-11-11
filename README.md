@@ -16,6 +16,7 @@ Anggota Kelompok :
   - [Prerequisites](#prerequisites)
   - [Installation and Run](#installation)
 - [File Structure](#file-structure)
+- [PembagianTugas](#pembagiantugas)
 
 ---
 
@@ -45,7 +46,8 @@ Repository ini terbagi menjadi 2 branch :
 ### Prerequisites
 
 - Standard **g++ compiler library**
-- **Python** versi 3.12 dengan library matplotlib **(Optional : hanya untuk master branch)**
+- **Python** versi 3.12 dengan library matplotlib **(Optional : hanya untuk master branch)**.
+  Jika Python atau library tidak ditemukan maka program akan exit, pastikan sudah ada
   
 ### Installation and Run Program
 
@@ -108,3 +110,40 @@ Repository ini terbagi menjadi 2 branch :
         ├───simulated_annealing
         ├───steepest_ascent_hl
         └───stochastic_hc
+
+---
+
+## Pembagian Tugas
+### 18222060
+- Membuat dan mengimplementasikan algoritma genetic algorithm
+- Menyusun dokumen bagian pembahasan
+- Menyusun dokumen laporan bagian hasil eksperimen dan analisis untuk algoritma  hill climbing with sideways move, stochastic hill climbing, random restart hill climbing, simulated annealing, genetic algorithm
+
+### 18222072
+- Membuat dan mengimplementasikan algoritma hill climbing with sideways move.
+- Membuat dan mengimplementasikan algoritma stochastic hill climbing.
+- Menyusun dokumen laporan bagian abstrak dan deskripsi persoalan
+- Menyusun dokumen laporan bagian implementasi algoritma steepest ascent hill climbing, hill climbing with sideways move, stochastic hill climbing
+- Menyusun dokumen laporan bagian hasil eksperimen dan analisis untuk algoritma steepest ascent hill climbing, hill climbing with sideways move, dan  stochastic hill climbing
+- Menyusun dokumen laporan bagian kesimpulan dan saran
+- Membuat README pada repository github
+
+### 18222083
+- Menyusun dan membuat Algoritma Objective Function 
+- Menyusun dan Membuat Algoritma Local search Steepest Ascent Hill Climbing & Simulated Annealing 
+- Membuat Function JumlahSkor (Heuristics) ,  Inisialisasi Random Cube , generate_neighbors & swap elements
+- Menyusun Dokumen penjelasan bagian Objective Function
+- Menyusun Dokumen penjelasan bagian Steepest Ascent Hill Climbing & Simulated Annealing
+- Menyusun Pembahasan terkait analisis hasil eksperimen yang terdiri dari 5 pertanyaan utama dalam membandingkan
+
+### 18222091
+- Membuat struktur file & repository Github untuk branch master dan opsi menjalankan program tanpa plot (without-plot)
+- Membuat visualisasi kubus menggunakan OPENGL (cpp) dengan library GLAD, GLFW dan GlText
+- Membuat CLI interface untuk program secara keseluruhan
+- Melakukan integrasi pada setiap algoritma agar dapat ditampilkan pada OPENGL interface
+- Membuat algoritma random restart hill climbing
+- Menyusun dan memperbaiki struct Result untuk kebutuhan visualisasi plot
+- Membuat visualisasi plot probabilitas dan objective function menggunakan python matplotlib cpp wrapper
+- Melakukan testing dan menulis laporan pada setiap algoritma meliputi ketentuan spek, initial state, final state, report, serta visualisasi plot.
+- Membuat laporan bagian penjelasan program dan visualisasi warna pada kubus
+
