@@ -3,7 +3,7 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++.exe build with matplotlib-cpp and Python integration",
+            "label": "C/C++: g++.exe build",
             "command": "C:/msys64/ucrt64/bin/g++.exe",
             "args": [
                 "-g",
@@ -18,10 +18,7 @@
                 "-I${workspaceFolder}/include/stochastic_hc",
                 "-I${workspaceFolder}/include/genetic",
                 "-I${workspaceFolder}/include/glad",
-                "-I", "C:/Python312/include",
-                "-I", "C:/Users/LENOVO/AppData/Roaming/Python/Python312/site-packages/numpy/_core/include",
                 "-L${workspaceFolder}/lib",
-                "-L", "C:/Python312/libs",
                 "${workspaceFolder}/src/main.cpp",
                 "${workspaceFolder}/src/glad.c",
                 "${workspaceFolder}/src/objfunc/obj.cpp",
@@ -31,7 +28,6 @@
                 "${workspaceFolder}/src/sideway_move/sm.cpp",
                 "${workspaceFolder}/src/stochastic_hc/shc.cpp",
                 "${workspaceFolder}/src/genetic/ga.cpp", 
-                "-lpython312",  
                 "-Wno-deprecated-declarations",
                 "-lglfw3dll",
                 "-o",
