@@ -3,17 +3,17 @@
 double scheduling(double t0, double cooling_rate, int iteration) {
     return t0 * pow(cooling_rate, iteration);
 }
+
 Result simulated_annealing(std::vector<std::vector<std::vector<int>>> cube) {
     Result result;
     result.cube = cube;
     result.error = calculate_error(result.cube);
     result.steps = 0;
-
+    resul.frekuensi_stuck = 0;
 
     double cooling_rate =  0.999999;
     double temp = 100.0;
     int max_iterate = 10000;
-
 
     std::vector<std::vector<std::vector<int>>> best_cube = result.cube;
     double best_error = result.error;

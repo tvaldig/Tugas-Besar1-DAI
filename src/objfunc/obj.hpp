@@ -22,6 +22,7 @@ struct Result {
     std::vector<double> objfunc; 
     std::vector<double> probability;
     std::vector<double> probabilityindex;
+    int frekuensi_stuck;
 };
 
 std::vector<std::vector<std::vector<std::vector<int>>>> generate_neighbors(const std::vector<std::vector<std::vector<int>>>& cube);
