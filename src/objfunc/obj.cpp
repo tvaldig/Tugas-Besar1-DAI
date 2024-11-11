@@ -292,6 +292,7 @@ void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
 
     } catch (...) {
         throw std::runtime_error("Tidak dapat menampilkan grafik");
+        return;
     }
 }
 
