@@ -11,10 +11,10 @@ Result simulated_annealing(std::vector<std::vector<std::vector<int>>> cube) {
     result.steps = 0;
     result.frekuensi_stuck = 0;
 
-    double cooling_rate =  0.999999;
-    double temp = 100.0;
-    int max_iterate = 10000;
-
+    double cooling_rate =  0.99999;
+    double temp = 1000.0;
+    int max_iterate = 100000;
+    auto start_time = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<std::vector<int>>> best_cube = result.cube;
     double best_error = result.error;
     
@@ -71,7 +71,8 @@ Result simulated_annealing(std::vector<std::vector<std::vector<int>>> cube) {
         result.iterasi.push_back(i);
         
     }
-
+    auto end_time = std::chrono::high_resolution_clock::now();
+    result.time_taken = std::chrono::duration<double>(end_time - start_time).count();
 
     return result;
 }

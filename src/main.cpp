@@ -35,6 +35,7 @@ std::vector<std::vector<std::vector<GLTtext*>>> texts(5, std::vector<std::vector
 GLTtext* text_continue;
 GLTtext* title;
 
+//magic cube example
 std::vector<std::vector<std::vector<int>>> perfectMagicCube = {
     {
         {25, 16, 80, 104, 90},
@@ -73,6 +74,7 @@ std::vector<std::vector<std::vector<int>>> perfectMagicCube = {
     }
 };
 
+//glsl file
 const char *vertexShaderSource = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
@@ -92,6 +94,7 @@ void main()
 }
 )";
 
+//Cube faces
 float vertices[] = {
     -0.4f, -0.4f, -0.4f,
     0.4f, -0.4f, -0.4f,
@@ -109,6 +112,7 @@ unsigned int indices[] = {
     0, 4, 1, 5, 2, 6, 3, 7
 };
 
+//fungsi input mouse
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
@@ -163,6 +167,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
     }
 }
 
+//Menampilkan kubus
 int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial){
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -270,7 +275,7 @@ int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial
             }
         }
 
-        // Text rendering for cube values
+        // Text rendering
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
                 for (int k = 0; k < 5; ++k) {
@@ -364,7 +369,7 @@ int displayState(std::vector<std::vector<std::vector<int>>> cube, bool isInitial
 
 
     
-
+//CLI Loop
 int main(int argc, char *argv[])
 {   
     int algoritma = -1;
@@ -447,7 +452,6 @@ int main(int argc, char *argv[])
                 namaalgoritma = "SIMULATED ANNEALING";
                 displayGraph(result, namaalgoritma, true);
                 break;
-            //tambahin case masing masing lagi
         }
         std::cout << "=====================LOCAL SEARCH REPORT========================" << std::endl;
         std::cout << "SEARCH ALGORITHM  : " << namaalgoritma << std::endl;
@@ -461,9 +465,7 @@ int main(int argc, char *argv[])
         std::cout << std::endl;
         displayState(result.cube, false);
         displayGraph(result, namaalgoritma, false);
-        
         }
-        
     }
     while(true);
     Py_Finalize();

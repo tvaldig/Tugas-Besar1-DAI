@@ -242,7 +242,7 @@ void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
     if(isSimulated){
         plt::plot(result.probabilityindex, result.probability);
         plt::xlabel("Iteration");
-        plt::ylabel("Probability"); 
+        plt::ylabel("Probability");
     }else {
         plt::plot(result.iterasi, result.objfunc);
         plt::xlabel("Iteration");
