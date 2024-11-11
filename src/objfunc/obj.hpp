@@ -6,7 +6,9 @@
 #include <cmath>
 #include <chrono>
 #include <iostream>
+#include <Windows.h>
 #include "matplotlibcpp.h"
+
 
 const int N = 5;
 const int VAL = 125;

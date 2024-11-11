@@ -230,10 +230,45 @@ int countConstraints(const std::vector<std::vector<std::vector<int>>> &cube, int
 
 namespace plt = matplotlibcpp;
 
+std::string findPythonPath() {
+    HKEY hKey;
+    std::string pythonPath = "";
+
+    const char* registryPaths[] = {
+        "SOFTWARE\\Python\\PythonCore\\3.12\\InstallPath",
+        "SOFTWARE\\Python\\PythonCore\\3.12\\InstallPath" 
+    };
+
+    for (int i = 0; i < 2; ++i) {
+        HKEY rootKey = (i == 0) ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE;
+        if (RegOpenKeyExA(rootKey, registryPaths[i], 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+            char path[256];
+            DWORD pathSize = sizeof(path);
+            if (RegQueryValueExA(hKey, "", NULL, NULL, (LPBYTE)path, &pathSize) == ERROR_SUCCESS) {
+                pythonPath = path;
+                RegCloseKey(hKey);
+                break;
+            }
+            RegCloseKey(hKey);
+        }
+    }
+
+    return pythonPath;
+}
+
 void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
 
-    _putenv_s("PYTHONHOME", "C:/Python312");
-    _putenv_s("PYTHONPATH", "C:/Python312/Lib;C:/Python312/Lib/site-packages");
+    std::string pythonPath = findPythonPath();
+    if (pythonPath.empty()) {
+        std::cerr << "Tidak ditemukan Python Path. Harap install Python3.12" << std::endl;
+        return;
+    }
+
+    std::string pythonHome = "PYTHONHOME=" + pythonPath;
+    std::string pythonLibPath = "PYTHONPATH=" + pythonPath + "Lib;" + pythonPath + "Lib\\site-packages";
+    _putenv(pythonHome.c_str());
+    _putenv(pythonLibPath.c_str());
+
     if (!Py_IsInitialized()) {
         Py_Initialize();
     }
