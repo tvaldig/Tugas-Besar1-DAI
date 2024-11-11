@@ -256,38 +256,51 @@ std::string findPythonPath() {
     return pythonPath;
 }
 
+#include <stdexcept>
+#include <iostream>
+#include <cstdlib>
+
 void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
+    try {
+ 
+        std::string pythonPath = findPythonPath();
+        if (pythonPath.empty()) {
+            throw std::runtime_error("Tidak ditemukan Python Path");
+        }
 
-    std::string pythonPath = findPythonPath();
-    std::cout << pythonPath << std::endl;
-    if (pythonPath.empty()) {
-        std::cerr << "Tidak ditemukan Python Path. Harap install Python3.12" << std::endl;
-        return;
-    }
+        std::string pythonHome = "PYTHONHOME=" + pythonPath;
+        std::string pythonLibPath = "PYTHONPATH=" + pythonPath + "Lib;" + pythonPath + "Lib\\site-packages";
+        _putenv(pythonHome.c_str());
+        _putenv(pythonLibPath.c_str());
 
-    std::string pythonHome = "PYTHONHOME=" + pythonPath;
-    std::string pythonLibPath = "PYTHONPATH=" + pythonPath + "Lib;" + pythonPath + "Lib\\site-packages";
-    _putenv(pythonHome.c_str());
-    _putenv(pythonLibPath.c_str());
+        if (!Py_IsInitialized()) {
+            Py_Initialize();
+        }
 
-    if (!Py_IsInitialized()) {
-        Py_Initialize();
+ 
+        plt::clf();
+        plt::backend("WXAgg");
+
+        if (isSimulated) {
+            plt::plot(result.probabilityindex, result.probability, {{"color", "red"}});
+            plt::xlabel("Iteration");
+            plt::ylabel("Probability");
+        } else {
+            plt::plot(result.iterasi, result.objfunc, {{"color", "blue"}});
+            plt::xlabel("Iteration");
+            plt::ylabel("Objective Function (Error)");
+        }
+
+        plt::title(namaalgoritma);
+        plt::show();
+        plt::clf();
+
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Tidak dapat menampilkan grafik " << e.what() << std::endl;
+        throw;
     }
-    plt::clf();
-    plt::backend("WXAgg");
-    if(isSimulated){
-        plt::plot(result.probabilityindex, result.probability);
-        plt::xlabel("Iteration");
-        plt::ylabel("Probability");
-    }else {
-        plt::plot(result.iterasi, result.objfunc);
-        plt::xlabel("Iteration");
-        plt::ylabel("Objective Function (Error)");   
-    }
-    plt::title(namaalgoritma);
-    plt::show();
-    plt::clf();
 }
+
 
 void destroyGraph(){
 
