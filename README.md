@@ -21,7 +21,7 @@ Anggota Kelompok :
 
 ## About the Project
 
-Tugas **Pencarian Solusi Diagonal Magic Cube dengan Local Search** bertujuan untuk menyelesaikan masalah magic cube 5x5x5 di mana jumlah bilangan pada setiap baris, kolom, tiang, diagonal ruang, dan diagonal pada suatu potongan bidang kubus bernilai sama yang disebut dengan magic number. Implementasi ini mencakup beberapa varian **hill climbing**, **simulated annealing**, dan **geneitc algorithm** untuk menjelajah ruang solusi yang ada:
+Tugas **Pencarian Solusi Diagonal Magic Cube dengan Local Search** bertujuan untuk menyelesaikan masalah magic cube 5x5x5 di mana jumlah bilangan pada setiap baris, kolom, tiang, diagonal ruang, dan diagonal pada suatu potongan bidang kubus bernilai sama yang disebut dengan magic number. Implementasi ini mencakup beberapa varian **hill climbing**, **simulated annealing**, dan **genetic algorithm** untuk menjelajah ruang solusi yang mungkin:
 - **Steepest Ascent Hill Climbing**: Hanya memilih neighbor dengan nilai error lebih kecil.
 - **Stochastic Hill Climbing**: Memilih neighbor secara acak dan menerimanya jika error neighbor lebih kecil.
 - **Hill Climbing with Sideways Moves**: Memungkinkan dilakukan pemindahan ke neighbor dengan eror yang sama dengan kondisi current.
