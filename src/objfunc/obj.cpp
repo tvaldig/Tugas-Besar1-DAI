@@ -259,6 +259,7 @@ std::string findPythonPath() {
 void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
 
     std::string pythonPath = findPythonPath();
+    std::cout << pythonPath << std::endl;
     if (pythonPath.empty()) {
         std::cerr << "Tidak ditemukan Python Path. Harap install Python3.12" << std::endl;
         return;
