@@ -454,6 +454,9 @@ int main(int argc, char *argv[])
         std::cout << "FINAL ERROR       : " << result.error << std::endl;
         std::cout << "TIME ESTIMATED    : " << result.time_taken << " SECONDS" << std::endl;
         std::cout << "STEPS TAKEN       : " << result.steps << std::endl;
+        if (namaalgoritma == "SIMULATED ANNEALING"){
+            std::cout << "STUCK FREQUENCY       : " << result.steps << std::endl;
+        }
         std::cout << "================================================================" << std::endl;
         std::cout << std::endl;
         displayState(result.cube, false);

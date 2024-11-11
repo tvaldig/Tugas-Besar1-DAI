@@ -9,7 +9,7 @@ Result simulated_annealing(std::vector<std::vector<std::vector<int>>> cube) {
     result.cube = cube;
     result.error = calculate_error(result.cube);
     result.steps = 0;
-    resul.frekuensi_stuck = 0;
+    result.frekuensi_stuck = 0;
 
     double cooling_rate =  0.999999;
     double temp = 100.0;
@@ -55,6 +55,7 @@ Result simulated_annealing(std::vector<std::vector<std::vector<int>>> cube) {
                 result.steps += 1;
                 result.probability.push_back(prob);
                 result.probabilityindex.push_back(i);
+                result.frekuensi_stuck += 1;
             }
         }
        
