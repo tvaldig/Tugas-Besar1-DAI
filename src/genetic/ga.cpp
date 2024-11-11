@@ -138,6 +138,8 @@ Result geneticAlgorithm(int N, int populationSize, int maxGenerations, double cr
         }
         result.error = calculate_error(bestIndividual.cube);
         result.error_history.push_back(result.error);
+        result.objfunc.push_back(result.error);
+        result.iterasi.push_back(generation+ 2);
         result.steps = generation + 1;
 
         int currentScore = jumlahSkor(bestIndividual.cube);
