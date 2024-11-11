@@ -45,7 +45,7 @@ Repository ini terbagi menjadi 2 branch :
 ### Prerequisites
 
 - Standard **g++ compiler library**
-- **Python** versi 3.12 dengan library matplotlib **(Optional untuk Branch without-plot)**
+- **Python** versi 3.12 dengan library matplotlib **(Optional : hanya untuk master branch)**
   
 ### Installation and Run Program
 
