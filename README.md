@@ -28,6 +28,12 @@ Tugas **Pencarian Solusi Diagonal Magic Cube dengan Local Search** bertujuan unt
 - **Simulated Annealing**: Menggabungkan eksplorasi ruang pencarian solusi dengan mekanisme probabilistik yang memungkinkan penerimaan solusi yang lebih buruk pada tahap awal pencarian untuk menghindari keterjebakan pada local minimal.
 - **Genetic Algorithm**: Menerapkan konsep seleksi alam dan evolusi genetik, yaitu selection, crossover, dan mutation.
 
+Contoh Magic Cube 5x5x5
+<p align="center">
+  <img width="600" height="400" src="example.jpg" alt="simple example" />
+</p>
+
+
 Repository ini terbagi menjadi 2 branch : 
 1. Master branch berisi program dengan visualisasi objective function terhadap tiap iterasi
 2. Branch without-plot berisi program tanpa visualisasi objective function
