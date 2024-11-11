@@ -258,7 +258,6 @@ std::string findPythonPath() {
 
 void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
     try {
- 
         std::string pythonPath = findPythonPath();
         if (pythonPath.empty()) {
             throw std::runtime_error("Tidak ditemukan Python Path");
@@ -293,7 +292,6 @@ void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
 
     } catch (...) {
         std::cerr << "Tidak dapat menampilkan grafik " << std::endl;
-        throw;
     }
 }
 
