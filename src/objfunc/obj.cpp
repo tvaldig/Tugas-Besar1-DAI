@@ -291,7 +291,7 @@ void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
         plt::clf();
 
     } catch (...) {
-        std::cerr << "Tidak dapat menampilkan grafik " << std::endl;
+        throw std::runtime_error("Tidak dapat menampilkan grafik");
     }
 }
 
