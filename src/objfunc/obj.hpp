@@ -8,6 +8,9 @@
 #include <iostream>
 #include <Windows.h>
 #include "matplotlibcpp.h"
+#include <stdexcept>
+#include <iostream>
+#include <cstdlib>
 
 
 const int N = 5;

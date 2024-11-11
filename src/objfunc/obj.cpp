@@ -256,10 +256,6 @@ std::string findPythonPath() {
     return pythonPath;
 }
 
-#include <stdexcept>
-#include <iostream>
-#include <cstdlib>
-
 void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
     try {
  
@@ -295,8 +291,8 @@ void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
         plt::show();
         plt::clf();
 
-    } catch (const std::runtime_error& e) {
-        std::cerr << "Tidak dapat menampilkan grafik " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "Tidak dapat menampilkan grafik " << std::endl;
         throw;
     }
 }
