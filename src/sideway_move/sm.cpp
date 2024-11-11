@@ -9,7 +9,8 @@ Result hill_climbing_with_sideway_moves(std::vector<std::vector<std::vector<int>
     bool improvement = true;
     int sideway_moves = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
-
+    result.objfunc.push_back(result.error);
+    result.iterasi.push_back(result.steps + 1);
     while (improvement) {
         improvement = false;
         auto best_cube = result.cube;
@@ -49,7 +50,9 @@ Result hill_climbing_with_sideway_moves(std::vector<std::vector<std::vector<int>
 
             result.error_history.push_back(result.error);
         }
-
+        result.objfunc.push_back(result.error);
+        result.iterasi.push_back(result.steps + 1);
+        
         if (result.error == 0 || sideway_moves >= max_sideways_moves) {
             break;
         }

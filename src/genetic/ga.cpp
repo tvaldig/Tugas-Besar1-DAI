@@ -101,14 +101,10 @@ void performMutation(Individual& individual, double mutationRate) {
     }
 }
 
-Result geneticAlgorithm(int N, int populationSize, int maxGenerations, double crossoverRate, double mutationRate) {
+Result geneticAlgorithm(std::vector<Individual> population, int populationSize, int maxGenerations, double crossoverRate, double mutationRate) {
     Result result;
     int target_sum = target_sum;
-    auto population = initializePopulation(populationSize, N, target_sum);
-    std::vector<std::vector<std::vector<int>>>* initialParent;
-
     Individual bestIndividual = population[0];
-    initialParent = &bestIndividual.cube;
     auto startTime = std::chrono::high_resolution_clock::now();
 
     for (int generation = 0; generation < maxGenerations; ++generation) {
@@ -160,4 +156,3 @@ Result geneticAlgorithm(int N, int populationSize, int maxGenerations, double cr
 
     return result;
 }
-

@@ -388,7 +388,33 @@ int main(int argc, char *argv[])
             exit(0);
         } else if (algoritma == 1){
             displayState(perfectMagicCube, false);
-        } else {
+        } else if (algoritma == 7){
+                Result result;
+                
+                int ukuranPopulasi;
+                int maxGenerasi; 
+                double tingkatCrossover;
+                double tingkatMutasi;  
+                std::cout << "Masukkan nilai ukuranPopulasi: ", std::cin >> ukuranPopulasi; 
+                std::cout << "Masukkan nilai maxGenerasi: ", std::cin >> maxGenerasi; 
+                std::cout << "Masukkan nilai tingkatCrossover: ", std::cin >> tingkatCrossover; 
+                std::cout << "Masukkan nilai tingkatMutasi: ", std::cin >> tingkatMutasi; 
+                std::cout << "Loading Initial State..." << std::endl;
+                auto population = initializePopulation(ukuranPopulasi, 5, target_sum);
+                Individual bestIndividual = population[0];
+                displayState(bestIndividual.cube, true);
+                result = geneticAlgorithm(population, ukuranPopulasi, maxGenerasi, tingkatCrossover, tingkatMutasi);
+                namaalgoritma = "GENETIC ALGORITHM";
+                std::cout << "=====================LOCAL SEARCH REPORT========================" << std::endl;
+                std::cout << "SEARCH ALGORITHM  : " << namaalgoritma << std::endl;
+                std::cout << "FINAL ERROR       : " << result.error << std::endl;
+                std::cout << "TIME ESTIMATED    : " << result.time_taken << " SECONDS" << std::endl;
+                std::cout << "STEPS TAKEN       : " << result.steps << std::endl;
+                std::cout << "================================================================" << std::endl;
+                std::cout << std::endl;
+                displayState(result.cube, false);
+                displayGraph(result, namaalgoritma, false);
+        }else {
             std::cout << "Loading Initial State..." << std::endl;
         std::vector<std::vector<std::vector<int>>> initial_cube = initialize_random_cube();
         displayState(initial_cube, true);
@@ -419,15 +445,7 @@ int main(int argc, char *argv[])
             case 6:
                 result = simulated_annealing(initial_cube);
                 namaalgoritma = "SIMULATED ANNEALING";
-                break;
-            case 7:
-                int N = 5; 
-                int ukuranPopulasi = 100;
-                int maxGenerasi = 10000; 
-                double tingkatCrossover = 0.8;
-                double tingkatMutasi = 0.05;   
-                result = geneticAlgorithm(N, ukuranPopulasi, maxGenerasi, tingkatCrossover, tingkatMutasi);
-                namaalgoritma = "GENETIC ALGORITHM";
+                displayGraph(result, namaalgoritma, true);
                 break;
             //tambahin case masing masing lagi
         }
@@ -439,10 +457,12 @@ int main(int argc, char *argv[])
         std::cout << "================================================================" << std::endl;
         std::cout << std::endl;
         displayState(result.cube, false);
-        displayGraph(result);
+        displayGraph(result, namaalgoritma, false);
+        
         }
         
     }
     while(true);
+    Py_Finalize();
     return 0;
 }

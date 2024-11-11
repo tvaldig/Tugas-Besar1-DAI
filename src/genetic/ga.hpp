@@ -6,7 +6,6 @@
 
 #include "../objfunc/obj.hpp"
 
-
 struct Individual {
     std::vector<int> chromosome;
     double fitness;
@@ -23,6 +22,6 @@ Individual selectParent(const std::vector<Individual>& population);
 std::pair<Individual, Individual> performCrossover(const Individual& parent1, const Individual& parent2);
 void performMutation(Individual& individual, double mutationRate);
 
-Result geneticAlgorithm(int N, int populationSize, int maxGenerations, double crossoverRate, double mutationRate);
+Result geneticAlgorithm(std::vector<Individual> population, int populationSize, int maxGenerations, double crossoverRate, double mutationRate);
 
 #endif

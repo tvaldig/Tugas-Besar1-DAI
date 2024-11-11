@@ -230,19 +230,32 @@ int countConstraints(const std::vector<std::vector<std::vector<int>>> &cube, int
 
 namespace plt = matplotlibcpp;
 
-void displayGraph(Result result) {
+void displayGraph(Result result, std::string namaalgoritma, bool isSimulated) {
 
     _putenv_s("PYTHONHOME", "C:/Python312");
     _putenv_s("PYTHONPATH", "C:/Python312/Lib;C:/Python312/Lib/site-packages");
-
-    Py_Initialize();
-
-    plt::plot(result.objfunc, result.iterasi);
-    plt::xlabel("Iteration");
-    plt::ylabel("Objective Function (Error)");
-    plt::title("Objective Function over Iterations");
+    if (!Py_IsInitialized()) {
+        Py_Initialize();
+    }
+    plt::clf();
+    plt::backend("WXAgg");
+    if(isSimulated){
+        plt::plot(result.probabilityindex, result.probability);
+        plt::xlabel("Iteration");
+        plt::ylabel("Probability"); 
+    }else {
+        plt::plot(result.iterasi, result.objfunc);
+        plt::xlabel("Iteration");
+        plt::ylabel("Objective Function (Error)");   
+    }
+    plt::title(namaalgoritma);
     plt::show();
     plt::clf();
+}
+
+void destroyGraph(){
+
+  
     plt::close();
     Py_Finalize();
 }
