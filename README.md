@@ -49,9 +49,22 @@ Repository ini terbagi menjadi 2 branch :
   
 ### Installation and Run Program
 
+#### master branch
 1. **Clone Repository**
    ```bash
    git clone https://github.com/tvaldig/Tugas-Besar1-DAI.git
+   cd Tugas-Besar1-DAI
+   
+2. **Run the program**
+   ```bash
+   ./cube
+
+#### branch without-plot
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/tvaldig/Tugas-Besar1-DAI.git
+   cd Tugas-Besar1-DAI
+   git switch origin/without-plot --detach
    
 2. **Run the program**
    ```bash
