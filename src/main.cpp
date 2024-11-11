@@ -418,7 +418,6 @@ int main(int argc, char *argv[])
                 std::cout << "================================================================" << std::endl;
                 std::cout << std::endl;
                 displayState(result.cube, false);
-                displayGraph(result, namaalgoritma, false);
         }else {
             std::cout << "Loading Initial State..." << std::endl;
         std::vector<std::vector<std::vector<int>>> initial_cube = initialize_random_cube();
@@ -450,7 +449,6 @@ int main(int argc, char *argv[])
             case 6:
                 result = simulated_annealing(initial_cube);
                 namaalgoritma = "SIMULATED ANNEALING";
-                displayGraph(result, namaalgoritma, true);
                 break;
         }
         std::cout << "=====================LOCAL SEARCH REPORT========================" << std::endl;
@@ -464,10 +462,8 @@ int main(int argc, char *argv[])
         std::cout << "================================================================" << std::endl;
         std::cout << std::endl;
         displayState(result.cube, false);
-        displayGraph(result, namaalgoritma, false);
         }
     }
     while(true);
-    Py_Finalize();
     return 0;
 }

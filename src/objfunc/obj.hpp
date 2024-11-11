@@ -6,7 +6,6 @@
 #include <cmath>
 #include <chrono>
 #include <iostream>
-#include "matplotlibcpp.h"
 
 const int N = 5;
 const int VAL = 125;
@@ -43,6 +42,4 @@ bool isMagicPillar(const std::vector<std::vector<std::vector<int>>> &cube, int r
 bool isMagic3DDiagonal(const std::vector<std::vector<std::vector<int>>> &cube);
 int countConstraints(const std::vector<std::vector<std::vector<int>>> &cube, int x, int y, int z);
 
-void displayGraph(Result result, std::string namaalgoritma, bool isSimulated);
-void destroyGraph();
 #endif
